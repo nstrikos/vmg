@@ -1,0 +1,10 @@
+*.ppu
+*.o
+backup/*
+magnifier
+magnifier.compiled
+magnifier.or
+libraries/imagelab/backup/*
+
+
+
