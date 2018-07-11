@@ -759,12 +759,32 @@ fm := vConfigurations.iMagnification;
   *  Draws the rectangular border
   *******************************************************************}
   begin
+
+  {$IFDEF Unix}
+
+  for margin := 0 to 4 do
+  begin
+    DestCanvas.MoveTo(GlassLeft + margin, GlassTop + margin);
+    DestCanvas.LineTo(GlassLeft + GlassWidth - margin, GlassTop + margin);
+    DestCanvas.MoveTo(GlassLeft + margin, GlassTop + margin);
+    DestCanvas.LineTo(GlassLeft + margin, GlassTop + GlassHeight - margin);
+    DestCanvas.MoveTo(GlassLeft + GlassWidth - margin, GlassTop + margin);
+    DestCanvas.LineTo(GlassLeft + GlassWidth - margin, GlassTop + GlassHeight - margin);
+    DestCanvas.MoveTo(GlassLeft + margin, GlassTop + GlassHeight - margin);
+    DestCanvas.LineTo(GlassLeft + GlassWidth - margin, GlassTop + GlassHeight - margin);
+  end
+
+  {$ELSE}
+
     DestCanvas.Brush.Color := clBlack;
     DestCanvas.FrameRect(Bounds(GlassLeft, GlassTop, GlassWidth, GlassHeight));
     DestCanvas.FrameRect(Bounds(GlassLeft + 1, GlassTop + 1, GlassWidth - 2, GlassHeight - 2));
     DestCanvas.Brush.Color := clGray;
     DestCanvas.FrameRect(Bounds(GlassLeft + 2, GlassTop + 2, GlassWidth - 4, GlassHeight - 4));
     DestCanvas.FrameRect(Bounds(GlassLeft + 3, GlassTop + 3, GlassWidth - 6, GlassHeight - 6));
+
+  {$IFEND}
+
   end;
   end; // with
 end;
