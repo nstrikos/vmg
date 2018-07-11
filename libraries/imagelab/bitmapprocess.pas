@@ -225,11 +225,6 @@ var
    sum :single;
 begin
 
-  if ( fm = 4 ) then
-     BGRAPolyrama4(Input, Output)
-  else
-  begin
-
    SetLength(ca, Output.Width, 4);
 
    for k := 0 to Output.Width - 1 do    //We calculate the factors of the multiplication
@@ -318,7 +313,6 @@ begin
 
       pOutput[k].alpha:=255;
     end;
-  end;
   Output.InvalidateBitmap; // changed by direct access
   end;
 end;
