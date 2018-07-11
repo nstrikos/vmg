@@ -736,9 +736,11 @@ procedure TMainWindow.MoveGlass(Sender: TObject; Shift: TShiftState; X,
 begin
   vGlass.GlassTop := Mouse.CursorPos.Y - vGlass.GlassHeight div 2 - vGlass.YScreen;
   vGlass.GlassLeft := Mouse.CursorPos.X - vGlass.GlassWidth div 2 - vGlass.XScreen;
-  {$IFNDEF MAGNIFIER_USE_NATIVE_STRETCH}
-  vGlass.FixGlassCoordinates(False);
-  {$ENDIF}
+
+  //This code prevents glass from moving to bottom if width is increased
+  //{$IFNDEF MAGNIFIER_USE_NATIVE_STRETCH}
+  //vGlass.FixGlassCoordinates(False);
+  //{$ENDIF}
   ControlToInvalidate.Invalidate;
 end;
 
