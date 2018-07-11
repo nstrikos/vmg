@@ -1359,7 +1359,11 @@ end;
 }
 {*******************************************************************}
 procedure TMainWindow.HandleKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+  Step : Integer;
 begin
+
+  if vConfigurations.iMagnification < 12.0 then Step := 10 else Step := 1;
   case Key of
    VK_UP:
    begin
@@ -1389,10 +1393,10 @@ begin
      UpdateConfigurations;
      if vConfigurations.UsePlugins then vMainWindow.Width := vGlass.GlassWidth;
    end;
-   VK_W: Mouse.CursorPos := Point(Mouse.CursorPos.X, Mouse.CursorPos.Y - 10);
-   VK_S: Mouse.CursorPos := Point(Mouse.CursorPos.X, Mouse.CursorPos.Y + 10);
-   VK_D: Mouse.CursorPos := Point(Mouse.CursorPos.X + 10, Mouse.CursorPos.Y);
-   VK_A: Mouse.CursorPos := Point(Mouse.CursorPos.X - 10, Mouse.CursorPos.Y);
+   VK_W: Mouse.CursorPos := Point(Mouse.CursorPos.X, Mouse.CursorPos.Y - Step);
+   VK_S: Mouse.CursorPos := Point(Mouse.CursorPos.X, Mouse.CursorPos.Y + Step);
+   VK_D: Mouse.CursorPos := Point(Mouse.CursorPos.X + Step, Mouse.CursorPos.Y);
+   VK_A: Mouse.CursorPos := Point(Mouse.CursorPos.X - Step, Mouse.CursorPos.Y);
    VK_PRIOR: Mouse.CursorPos := Point(Mouse.CursorPos.X, Mouse.CursorPos.Y - 50); // Page Up
    VK_NEXT: Mouse.CursorPos := Point(Mouse.CursorPos.X, Mouse.CursorPos.Y + 50);  // Page Down
    VK_ESCAPE: HideWindow(Self);
