@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="9"/>
+    <Version Value="10"/>
     <PathDelim Value="\"/>
     <General>
       <Flags>
@@ -20,7 +20,7 @@
           <PathDelim Value="\"/>
           <SearchPaths>
             <IncludeFiles Value="$(LazarusDir)\components\opengl\gtk2x11\include"/>
-            <OtherUnitFiles Value="$(LazarusDir)\components\opengl\gtk2x11;$(LazarusDir)\components\jpeg;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)"/>
+            <OtherUnitFiles Value="$(LazarusDir)\components\opengl\gtk2x11;libraries\uniqueinstance;$(LazarusDir)\components\jpeg;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)"/>
             <SrcPath Value="$(LazarusDir)\lcl;$(LazarusDir)\lcl\interfaces\$(LCLWidgetType)"/>
           </SearchPaths>
           <Parsing>
@@ -221,11 +221,11 @@
       <Unit0>
         <Filename Value="magnifier.dpr"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="lente"/>
       </Unit0>
       <Unit1>
         <Filename Value="glass.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="glass"/>
       </Unit1>
       <Unit2>
         <Filename Value="app.pas"/>
@@ -237,7 +237,6 @@
       <Unit3>
         <Filename Value="constants.pas"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="constants"/>
       </Unit3>
       <Unit4>
         <Filename Value="appsettings.pas"/>
@@ -264,7 +263,6 @@
         <ComponentName Value="ConfigDialog"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="configdlg"/>
       </Unit8>
       <Unit9>
         <Filename Value="lazfmlviewer.pas"/>

@@ -334,6 +334,9 @@ const
 const
   MYWM_NOTIFYICON = WM_USER + 77;
   MYWM_SHOWGLASS = WM_USER + 78;
+{$IFDEF Unix}
+  FILE_WATCH_SHORTCUT = '/tmp/magnifier_shortcut';
+{$ENDIF}
 
 implementation
 

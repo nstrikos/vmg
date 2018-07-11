@@ -81,6 +81,12 @@ type
     vMenu: TPopupMenu;
     SystrayIcon: TTrayIcon;
     DynamicModeTimer: TTimer;
+    {$IFDEF Unix}
+    CheckWatchFileTimer: TTimer;
+    procedure CheckWatchFile(Sender: TObject);
+    procedure CleanWatchFile;
+    procedure WriteWatchFile;
+    {$ENDIF}
     procedure ChangeInvertColors(Sender: TObject);
     procedure ChangeGraphicalBorder(Sender: TObject);
     procedure ChangeWidth(Sender: TObject);
@@ -166,6 +172,10 @@ end;
 procedure TMainWindow.CloseWindow(Sender: TObject);
 begin
   HandleClosePlugin(nil); // Otherwise exiting might be prevented
+{$IFDEF Unix}
+  if FileExists(FILE_WATCH_SHORTCUT) then
+     DeleteFile(FILE_WATCH_SHORTCUT);
+{$ENDIF}
   Close;
   Application.Terminate;
 end;
@@ -218,6 +228,13 @@ begin
   DynamicModeTimer.Enabled := False;
   DynamicModeTimer.OnTimer := HandleDynamicModeTimer;
   DynamicModeTimer.Interval := 25;
+
+  {$IFDEF Unix}
+  CheckWatchFileTimer := TTimer.Create(nil);
+  CheckWatchFileTimer.Enabled := True;
+  CheckWatchFileTimer.Interval := 1000;
+  CheckWatchFileTimer.OnTimer := CheckWatchFile;
+  {$ENDIF}
 end;
 
 {*******************************************************************}
@@ -489,6 +506,10 @@ begin
   vMenu.Free;
   vGlass.Free;
   DynamicModeTimer.Free;
+
+  {$IFDEF Unix}
+  CheckWatchFileTimer.Free;
+  {$ENDIF}
 
   { Unregister hotkeys }
 
@@ -1579,6 +1600,56 @@ begin
   {$ENDIF}
   {$ENDIF}
 end;
+
+{$IFDEF Unix}
+procedure TMainWindow.CheckWatchFile(Sender: TObject);
+var
+  tFile: TextFile;
+  FileContents : String;
+
+begin
+
+  if vMainWindow.Visible = False then
+  begin
+       AssignFile(tFile, FILE_WATCH_SHORTCUT);
+
+       if FileExists(FILE_WATCH_SHORTCUT) then
+       begin
+            reset(tFile);
+            while not eof(tFile) do
+            begin
+                 readln(tFile, FileContents);
+            end;
+            CloseFile(tFile);
+       end;
+       if FileContents = 'Show' then
+       begin
+            CleanWatchFile;
+            vMainWindow.ExecuteLens(nil);
+       end;
+  end;
+end;
+
+procedure TMainWindow.CleanWatchFile;
+var
+  tFile: TextFile;
+begin
+     AssignFile(tFile, FILE_WATCH_SHORTCUT);
+     rewrite(tFile);
+     writeln(tFile, '');
+     CloseFile(tFile);
+end;
+
+procedure TMainWindow.WriteWatchFile;
+var
+  tFile: TextFile;
+begin
+     AssignFile(tFile, FILE_WATCH_SHORTCUT);
+     rewrite(tFile);
+     writeln(tFile, 'Show');
+     CloseFile(tFile);
+end;
+{$ENDIF}
 
 end.
 

@@ -67,6 +67,11 @@ uses
   configdlg in 'configdlg.pas',
 //  lazfmlviewer in 'lazfmlviewer.pas',
 //  fmlscan in 'fmldriver.pas',
+
+{$IFDEF Unix}
+   UniqueInstanceRaw,
+{$ENDIF}
+
   plugininfo, startform;
 
 {@@
@@ -74,6 +79,25 @@ uses
 
   This procedure is executed as soon as the program is executed
 }
+
+{$IFDEF Unix}
+function CheckRunningInstance : Boolean;
+var
+   tFile: TextFile;
+begin
+   if InstanceRunning() then
+   begin
+       AssignFile(tFile, FILE_WATCH_SHORTCUT);
+       rewrite(tFile);
+       writeln(tFile, 'Show');
+       CloseFile(tFile);
+       Result := True;
+   end
+   else
+       Result := False;
+end;
+{$ENDIF}
+
 var
   AHandle, Semaphore: Cardinal;
   lResult, lStartForm: Boolean;
@@ -102,6 +126,10 @@ begin
   *
   *  The order in which these methods are called is very important
   *******************************************************************}
+  {$IFDEF Unix}
+     if CheckRunningInstance then Exit;
+  {$ENDIF}
+
   Application.Initialize;
   Application.CreateForm(TMainWindow, vMainWindow);
   Application.CreateForm(TAboutWindow, vAboutWindow);
