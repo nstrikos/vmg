@@ -116,6 +116,7 @@ type
     procedure ShowHomePage(Sender: TObject);
     procedure ShowAboutBox(Sender: TObject);
     procedure ShowConfigDialog(Sender: TObject);
+    procedure ShowPostProcessDialog(Sender: TObject);
     procedure ShowHelp(Sender: TObject);
     procedure SystrayClick(Sender: TObject);
     procedure TranslateTaskbarMenu(Sender: TObject);
@@ -139,7 +140,7 @@ var
 
 implementation
 
-uses about, translationsvmg, configdlg;
+uses about, translationsvmg, configdlg, postprocessdlg;
 
 {*******************************************************************
 *  app.dfm is a dummy resource file required by Delphi to create the form
@@ -399,9 +400,12 @@ begin
 
   MyMenuItems[ID_MENU_ANTIALIASING] := TMenuItem.Create(Self);
   MyMenuItems[ID_MENU_ANTIALIASING].OnClick := ChangeAntiAliasing;
-{$IFDEF Windows}
-  MyMenuItems[ID_MENU_ANTIALIASING].Enabled := False;
-{$ENDIF}
+
+  MyMenuItems[ID_MENU_POST_PROCESS_DIALOG] := TMenuItem.Create(Self);
+  MyMenuItems[ID_MENU_POST_PROCESS_DIALOG].OnClick := ShowPostProcessDialog;
+//{$IFDEF Windows}
+//  MyMenuItems[ID_MENU_ANTIALIASING].Enabled := False;
+//{$ENDIF}
 
   MyMenuItems[ID_SEPARATOR_ONE] := TMenuItem.Create(Self);
   MyMenuItems[ID_SEPARATOR_ONE].Caption := lpSeparator;
@@ -490,7 +494,7 @@ begin
   MyMenuItems[ID_MENU_TERMINATE] := TMenuItem.Create(Self);
   MyMenuItems[ID_MENU_TERMINATE].OnClick := CloseWindow;
 
-  for i := 0 to 19 do lpMenu.Items.Add(MyMenuItems[i]);
+  for i := 0 to 20 do lpMenu.Items.Add(MyMenuItems[i]);
 
   UpdateConfigurations;
 end;
@@ -931,6 +935,7 @@ begin
   vMenu.Items[ID_MENU_GRAPHICAL_BORDER].Caption := vTranslations.lpGraphicalBorder;
   vMenu.Items[ID_MENU_INVERT_COLORS].Caption := vTranslations.lpInvertColors;
   vMenu.Items[ID_MENU_ANTIALIASING].Caption := vTranslations.lpAntiAliasing;
+  vMenu.Items[ID_MENU_POST_PROCESS_DIALOG].Caption := vTranslations.lpPostProcess;
   vMenu.Items[ID_MENU_CONFIG_DIALOG].Caption := vTranslations.lpConfigDialog;
   vMenu.Items[ID_MENU_TRANSLATIONS].Caption := vTranslations.lpTranslations;
   vMenu.Items[ID_MENU_SAVE].Caption := vTranslations.lpSave;
@@ -1037,6 +1042,14 @@ procedure TMainWindow.ShowConfigDialog(Sender: TObject);
 begin
   HandleClosePlugin(nil); // Otherwise there might be problems in the dialog
   vConfigDialog.ShowModal;
+end;
+
+procedure TMainWindow.ShowPostProcessDialog(Sender: TObject);
+begin
+  vPostProcessDialogForm :=  TPostProcessDialog.Create(nil);
+  vPostProcessDialogForm.setConfigurations(vConfigurations);
+  vPostProcessDialogForm.ShowModal;
+  FreeAndNil(vPostProcessDialogForm);
 end;
 
 {*******************************************************************}

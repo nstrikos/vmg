@@ -3,22 +3,23 @@
   <ProjectSession>
     <Version Value="10"/>
     <BuildModes Active="release"/>
-    <Units Count="16">
+    <Units Count="17">
       <Unit0>
         <Filename Value="magnifier.dpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="lente"/>
-        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="111"/>
         <CursorPos X="6" Y="130"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="21"/>
       </Unit0>
       <Unit1>
         <Filename Value="glass.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="54"/>
+        <CursorPos X="53" Y="61"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="app.pas"/>
@@ -26,20 +27,21 @@
         <ComponentName Value="MainWindow"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="161"/>
-        <CursorPos X="17" Y="176"/>
-        <UsageCount Value="20"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="130"/>
+        <CursorPos X="41" Y="143"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
       </Unit2>
       <Unit3>
         <Filename Value="constants.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit3>
       <Unit4>
         <Filename Value="appsettings.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit4>
       <Unit5>
         <Filename Value="about.pas"/>
@@ -47,17 +49,17 @@
         <ComponentName Value="AboutWindow"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit5>
       <Unit6>
         <Filename Value="plugins.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit6>
       <Unit7>
         <Filename Value="translationsvmg.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit7>
       <Unit8>
         <Filename Value="configdlg.pas"/>
@@ -65,47 +67,67 @@
         <ComponentName Value="ConfigDialog"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit8>
       <Unit9>
         <Filename Value="lazfmlviewer.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit9>
       <Unit10>
         <Filename Value="fmlscan.l"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit10>
       <Unit11>
         <Filename Value="fmlscan.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit11>
       <Unit12>
         <Filename Value="fmldriver.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit12>
       <Unit13>
         <Filename Value="plugininfo.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit13>
       <Unit14>
         <Filename Value="LexLib.pas"/>
         <IsPartOfProject Value="True"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit14>
       <Unit15>
         <Filename Value="startform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="vStartWindow"/>
         <ResourceBaseClass Value="Form"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="21"/>
       </Unit15>
+      <Unit16>
+        <Filename Value="libraries/imagelab/bitmapprocess.pas"/>
+        <UnitName Value="BitmapProcess"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="116"/>
+        <CursorPos X="17" Y="129"/>
+        <FoldState Value=" T3iG0S011C"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit16>
     </Units>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory Count="2" HistoryIndex="1">
+      <Position1>
+        <Filename Value="glass.pas"/>
+        <Caret Line="61" Column="53" TopLine="54"/>
+      </Position1>
+      <Position2>
+        <Filename Value="libraries/imagelab/bitmapprocess.pas"/>
+        <Caret Line="134" TopLine="109"/>
+      </Position2>
+    </JumpHistory>
   </ProjectSession>
 </CONFIG>

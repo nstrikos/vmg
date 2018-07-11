@@ -49,7 +49,7 @@ type
      lpDynamicMode, lpInvertColors, lpConfigDialog,
      lpGraphicalBorder, lpTools, lpMagnification, lpHeight,
      lpWidth, lpActivate, lpTranslations, lpYes, lpNo,
-     lpAntiAliasing, lpHelp, lpClosePlugin: string;
+     lpAntiAliasing, lpPostProcess, lpHelp, lpClosePlugin: string;
     { About box strings }
     lpSupport, lpSupportInfo, lpLicense, lpLicenseInfo, lpAuthors,
      lpContributorsTitle, lpAboutWindow, lpClose, lpInformation: string;
@@ -121,6 +121,7 @@ begin
   lpYes := 'Yes';
   lpNo := 'No';
   lpAntiAliasing := 'Anti-Aliasing';
+  lpPostProcess := 'Additional Process Dialog';
   lpHelp := 'Help';
   lpClosePlugin  := 'Close Plugin';
 

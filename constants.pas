@@ -88,22 +88,23 @@ const
   ID_MENU_GRAPHICAL_BORDER      = 5;
   ID_MENU_INVERT_COLORS         = 6;
   ID_MENU_ANTIALIASING          = 7;
+  ID_MENU_POST_PROCESS_DIALOG   = 8;
   // Separator
-  ID_MENU_CONFIG_DIALOG         = 9;
-  ID_MENU_TRANSLATIONS          = 10;
-  ID_MENU_SAVE                  = 11;
-  ID_MENU_USE_PLUGIN            = 12;
-  ID_MENU_CLOSE_PLUGIN          = 13;
+  ID_MENU_CONFIG_DIALOG         = 10;
+  ID_MENU_TRANSLATIONS          = 11;
+  ID_MENU_SAVE                  = 12;
+  ID_MENU_USE_PLUGIN            = 13;
+  ID_MENU_CLOSE_PLUGIN          = 14;
   // Separator
-  ID_MENU_HOMEPAGE              = 15;
-  ID_MENU_ABOUT                 = 16;
-  ID_MENU_HELP                  = 17;
-  ID_MENU_CANCEL                = 18;
-  ID_MENU_TERMINATE             = 19;
+  ID_MENU_HOMEPAGE              = 16;
+  ID_MENU_ABOUT                 = 17;
+  ID_MENU_HELP                  = 18;
+  ID_MENU_CANCEL                = 19;
+  ID_MENU_TERMINATE             = 20;
 
   { Separators }
-  ID_SEPARATOR_ONE              = 8;
-  ID_SEPARATOR_TWO              = 14;
+  ID_SEPARATOR_ONE              = 9;
+  ID_SEPARATOR_TWO              = 15;
 
   ID_MENU_WIDTH_64              = 0;
   ID_MENU_WIDTH_96              = 1;
@@ -306,6 +307,7 @@ const
   SectionUnix = 'UNIX';
   SectionWindows = 'Windows';
   SectionPlugins = 'Plugins';
+  SectionAdditionalEffects = 'Effects';
 
   IdentgraphicalBorder = 'graphicalBorder';
   IdentxSquare = 'xSquare';
@@ -327,6 +329,14 @@ const
   IdentUsePlugins = 'UsePlugins';
   IdentPluginName = 'PluginName';
   IdentPluginData = 'PluginData';
+
+  IdentUseRemap = 'UseRemap';
+  IdentRemapWidth = 'RemapWidth';
+  IdentRemapHeight = 'RemapHeight';
+  IdentAntiAliasingMode = 'AntiAliasingMode';
+  IdentSimpleAntiAliasing = 'Simple';
+  IdentCatMullAntiAliasing = 'CatMull';
+  IdentPolyramaAntiAliasing = 'Polyrama';
 
 {*******************************************************************
 *  Custom Signals

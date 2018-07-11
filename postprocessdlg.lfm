@@ -1,0 +1,8 @@
+object PostProcessDialog: TPostProcessDialog
+  Left = 349
+  Height = 374
+  Top = 200
+  Width = 589
+  Caption = 'Additional Process Dialog'
+  LCLVersion = '1.8.4.0'
+end

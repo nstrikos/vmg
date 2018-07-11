@@ -65,6 +65,10 @@ type
     UsePlugins: Boolean;
     PluginName: string;
     PluginData: Integer;
+    UseRemap: Boolean;
+    RemapWidth: Integer;
+    RemapHeight: Integer;
+    AntiAliasingMode : string;
     constructor Create;
     destructor Destroy; override;
     procedure ReadFromFile(Sender: TObject);
@@ -121,6 +125,11 @@ begin
   UsePlugins := False;
   PluginName := 'pas_overlays.dll';
   PluginData := -1;
+
+  UseRemap := False;
+  RemapWidth := 50;
+  RemapHeight := 50;
+  AntiAliasingMode := IdentSimpleAntiAliasing;
 
   { Now identifies where the configuration file should be }
   ConfigFilePath := GetConfigFilePath();
@@ -192,6 +201,12 @@ begin
     UsePlugins := MyFile.ReadBool(SectionPlugins, IdentUsePlugins, False);
     PluginName := MyFile.ReadString(SectionPlugins, IdentPluginName, 'pas_overlays.dll');
     PluginData := MyFile.ReadInteger(SectionPlugins, IdentPluginData, 0);
+
+    UseRemap := MyFile.ReadBool(SectionAdditionalEffects, IdentUseRemap, False);
+    RemapWidth := MyFile.ReadInteger(SectionAdditionalEffects, IdentRemapWidth, 50);
+    RemapHeight := MyFile.ReadInteger(SectionAdditionalEffects, IdentRemapHeight, 50);
+
+    AntiAliasingMode := MyFile.ReadString(SectionAdditionalEffects, IdentAntiAliasingMode, IdentSimpleAntiAliasing);
   finally
     MyFile.Free;
 
@@ -238,6 +253,12 @@ begin
     MyFile.WriteBool(SectionPlugins, IdentUsePlugins, UsePlugins);
     MyFile.WriteString(SectionPlugins, IdentPluginName, PluginName);
     MyFile.WriteInteger(SectionPlugins, IdentPluginData, PluginData);
+
+    MyFile.WriteBool(SectionAdditionalEffects, IdentUseRemap, UseRemap);
+    MyFile.WriteInteger(SectionAdditionalEffects, IdentRemapWidth, RemapWidth);
+    MyFile.WriteInteger(SectionAdditionalEffects, IdentRemapHeight, RemapHeight);
+
+    Myfile.WriteString(SectionAdditionalEffects, IdentAntiAliasingMode, AntiAliasingMode);
   finally
     MyFile.Free;
   end;

@@ -58,7 +58,7 @@ uses
   // LCL
   Graphics, Controls, Classes, SysUtils, ExtCtrls, Forms,
   constants, appsettings, translationsvmg, LMessages,
-  IntfGraphics, LCLIntf, lazcanvas;
+  IntfGraphics, LCLIntf, lazcanvas, BGRABitmap, BitmapProcess;
 
 type
 
@@ -657,6 +657,12 @@ var
   I: Integer;
   dwROP: Cardinal;
   ImageCanvas: TFPImageCanvas = nil;
+  image, stretched, remap: TBGRABitmap;
+  fm : Single;
+
+{$IFDEF Unix}
+  margin : Integer;
+{$ENDIF}
 begin
   with DrawInfo do
   begin
@@ -676,54 +682,56 @@ begin
   {*******************************************************************
   *  Draws the enlarged glass contents
   *******************************************************************}
-{$IFDEF MAGNIFIER_USE_NATIVE_STRETCH}
 
-  if vConfigurations.invertColors then
-  begin
-    DestCanvas.Brush.Color := clWhite;
-    DestCanvas.FillRect(drawGlassRect);
-  end;
+//Old code
+//{$IFDEF MAGNIFIER_USE_NATIVE_STRETCH}
 
-  StretchBlt(DestCanvas.Handle, drawGlassRect.Left, drawGlassRect.Top,
-   drawGlassWidth, drawGlassHeight,
-   bmpDisplay.Canvas.Handle, viewRect.Left, viewRect.Top,
-   viewRectWidth, viewRectHeight, dwROP);
+  //if vConfigurations.invertColors then
+  //begin
+  //  DestCanvas.Brush.Color := clWhite;
+  //  DestCanvas.FillRect(drawGlassRect);
+  //end;
 
-{$ELSE}
+  //StretchBlt(DestCanvas.Handle, drawGlassRect.Left, drawGlassRect.Top,
+  // drawGlassWidth, drawGlassHeight,
+  // bmpDisplay.Canvas.Handle, viewRect.Left, viewRect.Top,
+  // viewRectWidth, viewRectHeight, dwROP);
 
-  // First we need to load the TLazIntfImage from a dummy bitmap to initialize it
-  TmpBitmap.Width := drawGlassWidth;
-  TmpBitmap.Height := drawGlassHeight;
-  Image.LoadFromBitmap(TmpBitmap.Handle, 0);
+//{$IFEND}
 
-  // Now build a Canvas for our destination image
-  ImageCanvas := TFPImageCanvas.create(Image);
-  if vConfigurations.AntiAliasing then
-    ImageCanvas.Interpolation := TMitchelInterpolation.Create
-  else
-    ImageCanvas.Interpolation := TFPSharpInterpolation.Create;
+//new code
+fm := vConfigurations.iMagnification;
+   image := TBGRABitmap.Create(viewRectWidth, viewRectHeight);
+   stretched := TBGRABitmap.Create(Round(viewRectWidth * fm), Round(viewRectHeight * fm));
+   remap := TBGRABitmap.Create(Round(viewRectWidth * fm), Round(viewRectHeight * fm));
+   image.Canvas.CopyRect(Bounds(0, 0, viewRectWidth, viewRectHeight), bmpDisplay.Canvas, viewRect);
+   if vConfigurations.invertColors then
+      BGRAInvertColors(image);
 
-  // Now Copy a section of the display
-  bmpEnlargedDisplay.Height := viewRectHeight;
-  bmpEnlargedDisplay.Width := viewRectWidth;
-  bmpEnlargedDisplay.Canvas.CopyRect(
-   Bounds(0, 0, viewRectWidth, viewRectHeight),
-   bmpDisplay.Canvas, viewRect);
-  SecImage.LoadFromBitmap(bmpEnlargedDisplay.Handle, 0);
+   if vConfigurations.AntiAliasing then
+   begin
+        if vConfigurations.AntiAliasingMode = IdentCatMullAntiAliasing then
+           BGRABicubicCatmullRom(image, fm, stretched)
+        else if vConfigurations.AntiAliasingMode = IdentPolyramaAntiAliasing then
+           BGRABicubicPolyrama(image, fm , stretched)
+        else
+           BGRABilinear(image, fm , stretched)
+   end
+   else
+      BGRAPixelRepetition(image, fm, stretched );
 
-  // Enlarge this section of the display
-  ImageCanvas.StretchDraw(
-    0, 0, drawGlassWidth, drawGlassHeight,
-    SecImage);
-
-  // And draw the result to our Canvas via a temporary bitmap
-  TmpBitmap.LoadFromIntfImage(Image);
-  DestCanvas.Draw(drawGlassRect.Left, drawGlassRect.Top, TmpBitmap);
-
-  ImageCanvas.Interpolation.Free;
-  ImageCanvas.Interpolation := nil;
-  ImageCanvas.Free;
-{$IFEND}
+   if vConfigurations.UseRemap then
+   begin
+       BGRARemap(stretched, remap, vConfigurations.RemapWidth, vConfigurations.RemapHeight);
+       remap.Draw(DestCanvas, drawGlassRect.Left, drawGlassRect.Top, True);
+   end
+   else
+   begin
+       stretched.Draw(DestCanvas, drawGlassRect.Left, drawGlassRect.Top, True);
+   end;
+   image.free;
+   stretched.free;
+   remap.free;
 
   {*******************************************************************
   *  Draws the graphical border
