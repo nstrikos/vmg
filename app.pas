@@ -1513,7 +1513,7 @@ begin
   if vConfigurations.iMagnification < 1.0 then vConfigurations.iMagnification := 1.0
   else if vConfigurations.iMagnification > 16 then vConfigurations.iMagnification := 16;
 
-  {$IFDEF LCLGTK2}
+  {$IFDEF UNIX}
   ControlToInvalidate.Invalidate;
   {$ENDIF}
   vGlass.Repaint;
