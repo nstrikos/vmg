@@ -1,7 +1,7 @@
 object MainWindow: TMainWindow
-  Left = 0
+  Left = 461
   Height = 240
-  Top = 22
+  Top = 240
   Width = 320
-  LCLVersion = '1.1'
+  LCLVersion = '1.8.4.0'
 end

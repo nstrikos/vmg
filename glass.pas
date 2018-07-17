@@ -760,7 +760,7 @@ fm := vConfigurations.iMagnification;
   *******************************************************************}
   begin
 
-  {$IFDEF Unix}
+  {$IFDEF LCLQT5}
 
   for margin := 0 to 4 do
   begin
