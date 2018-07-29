@@ -87,7 +87,6 @@ begin
   Output.InvalidateBitmap; // changed by direct access
 end;
 
-//need to take care of border pixels
 procedure BGRABilinear (Input : TBGRABitmap ; fm:extended; Output : TBGRABitmap);
 var
    x,y:single;
@@ -98,37 +97,32 @@ var
 begin
   for l := 0 to Output.Height-1 do
   begin
-    y:=(l+0.5)/fm;
+    y := l/fm;
     i:=trunc(y);
     a:=y-i;
+
+    p1 := Input.ScanLine[i];
+
+    //take care of border pixels
     if i < Input.Height-1 then
-    begin
-        p1 := Input.ScanLine[i];
-        p2 := Input.ScanLine[i+1];
-    end
+        p2 := Input.ScanLine[i+1]
     else
-    begin
-        p1 := Input.ScanLine[i];
         p2 := Input.ScanLine[i];
-    end;
 
     pOutput:=Output.ScanLine[l];
 
     for k := 0 to Output.Width-1 do
     begin
-      x:=(k+0.5)/fm;
+      x := k/fm;
       j:=trunc(x);
       b:=x-j;
+      j1 := j;
+
+      //take care of border pixels
       if j < Input.Width-1 then
-      begin
-         j1 := j;
-         j2 := j+1;
-      end
+         j2 := j+1
       else
-      begin
-        j1 := j;
-        j2 := j;
-      end;
+         j2 := j;
 
       pOutput[k].red:=Round(p1[j1].red*(1-a)*(1-b) + p1[j2].red*(1-a)*b + p2[j1].red*a*(1-b) + p2[j2].red*a*b);
       pOutput[k].green:=Round(p1[j1].green*(1-a)*(1-b) + p1[j2].green*(1-a)*b + p2[j1].green*a*(1-b) + p2[j2].green*a*b);
