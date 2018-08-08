@@ -41,6 +41,8 @@ uses
      procedure BGRABicubicCatmullRom (Input : TBGRABitmap ; fm:extended; Output : TBGRABitmap);
      procedure BGRAInvertColors(Input : TBGRABitmap);
      procedure BGRARemap (Input : TBGRABitmap; Output : TBGRABitmap; width, height : Integer);
+     procedure BGRAUnsharp3(Input : TBGRABitmap; sigma, f: Single);
+     procedure Gauss(sigma: Single; Width: Integer; var Kernel: ImageArray);
      procedure BGRASetAlpha(Input : TBGRABitmap);
 
      function c(x:single):single;         //bicubic filter
@@ -285,20 +287,20 @@ begin
 
       pOutput[k].red:= Round(sum);
 
-      sum := Round(c5*(p0[j].green*c1 + p0[j].green*c2 + p0[j3].green*c3 + p0[j4].green*c4)
-                 + c6*(p1[j].green*c1 + p1[j].green*c2 + p1[j3].green*c3 + p1[j4].green*c4)
-                 + c7*(p2[j].green*c1 + p2[j].green*c2 + p2[j3].green*c3 + p2[j4].green*c4)
-                 + c8*(p3[j].green*c1 + p3[j].green*c2 + p3[j3].green*c3 + p3[j4].green*c4));
+      sum := Round(c5*(p0[j1].green*c1 + p0[j].green*c2 + p0[j3].green*c3 + p0[j4].green*c4)
+                 + c6*(p1[j1].green*c1 + p1[j].green*c2 + p1[j3].green*c3 + p1[j4].green*c4)
+                 + c7*(p2[j1].green*c1 + p2[j].green*c2 + p2[j3].green*c3 + p2[j4].green*c4)
+                 + c8*(p3[j1].green*c1 + p3[j].green*c2 + p3[j3].green*c3 + p3[j4].green*c4));
 
       if sum > 255 then sum := 255;
       if sum <0 then sum :=0;
 
       pOutput[k].green:= Round(sum);
 
-      sum := Round(c5*(p0[j].blue*c1 + p0[j].blue*c2 + p0[j3].blue*c3 + p0[j4].blue*c4)
-                 + c6*(p1[j].blue*c1 + p1[j].blue*c2 + p1[j3].blue*c3 + p1[j4].blue*c4)
-                 + c7*(p2[j].blue*c1 + p2[j].blue*c2 + p2[j3].blue*c3 + p2[j4].blue*c4)
-                 + c8*(p3[j].blue*c1 + p3[j].blue*c2 + p3[j3].blue*c3 + p3[j4].blue*c4));
+      sum := Round(c5*(p0[j1].blue*c1 + p0[j].blue*c2 + p0[j3].blue*c3 + p0[j4].blue*c4)
+                 + c6*(p1[j1].blue*c1 + p1[j].blue*c2 + p1[j3].blue*c3 + p1[j4].blue*c4)
+                 + c7*(p2[j1].blue*c1 + p2[j].blue*c2 + p2[j3].blue*c3 + p2[j4].blue*c4)
+                 + c8*(p3[j1].blue*c1 + p3[j].blue*c2 + p3[j3].blue*c3 + p3[j4].blue*c4));
 
       if sum > 255 then sum := 255;
       if sum <0 then sum :=0;
@@ -390,20 +392,20 @@ begin
 
       pOutput[k].red:= Round(sum);
 
-      sum := Round(c5*(p0[j].green*c1 + p0[j].green*c2 + p0[j3].green*c3 + p0[j4].green*c4)
-                 + c6*(p1[j].green*c1 + p1[j].green*c2 + p1[j3].green*c3 + p1[j4].green*c4)
-                 + c7*(p2[j].green*c1 + p2[j].green*c2 + p2[j3].green*c3 + p2[j4].green*c4)
-                 + c8*(p3[j].green*c1 + p3[j].green*c2 + p3[j3].green*c3 + p3[j4].green*c4));
+      sum := Round(c5*(p0[j1].green*c1 + p0[j].green*c2 + p0[j3].green*c3 + p0[j4].green*c4)
+                 + c6*(p1[j1].green*c1 + p1[j].green*c2 + p1[j3].green*c3 + p1[j4].green*c4)
+                 + c7*(p2[j1].green*c1 + p2[j].green*c2 + p2[j3].green*c3 + p2[j4].green*c4)
+                 + c8*(p3[j1].green*c1 + p3[j].green*c2 + p3[j3].green*c3 + p3[j4].green*c4));
 
       if sum > 255 then sum := 255;
       if sum <0 then sum :=0;
 
       pOutput[k].green:= Round(sum);
 
-      sum := Round(c5*(p0[j].blue*c1 + p0[j].blue*c2 + p0[j3].blue*c3 + p0[j4].blue*c4)
-                 + c6*(p1[j].blue*c1 + p1[j].blue*c2 + p1[j3].blue*c3 + p1[j4].blue*c4)
-                 + c7*(p2[j].blue*c1 + p2[j].blue*c2 + p2[j3].blue*c3 + p2[j4].blue*c4)
-                 + c8*(p3[j].blue*c1 + p3[j].blue*c2 + p3[j3].blue*c3 + p3[j4].blue*c4));
+      sum := Round(c5*(p0[j1].blue*c1 + p0[j].blue*c2 + p0[j3].blue*c3 + p0[j4].blue*c4)
+                 + c6*(p1[j1].blue*c1 + p1[j].blue*c2 + p1[j3].blue*c3 + p1[j4].blue*c4)
+                 + c7*(p2[j1].blue*c1 + p2[j].blue*c2 + p2[j3].blue*c3 + p2[j4].blue*c4)
+                 + c8*(p3[j1].blue*c1 + p3[j].blue*c2 + p3[j3].blue*c3 + p3[j4].blue*c4));
 
       if sum > 255 then sum := 255;
       if sum <0 then sum :=0;
@@ -966,6 +968,164 @@ begin
   Output.InvalidateBitmap; // changed by direct access
 end;
 
+procedure BGRAUnsharp3(Input : TBGRABitmap; sigma, f: Single);
+var
+   i, j, j0, j1, j2, KernelWidth : integer;
+   value: single;
+   p0, p1, p2: PBGRAPixel;
+   BlurRed, BlurGreen, BlurBlue, MaskRed, MaskGreen, MaskBlue : array of array of single;
+   Kernel : ImageArray;
+begin
+
+  SetLength(MaskRed, Input.Height, Input.Width);
+  SetLength(MaskGreen, Input.Height, Input.Width);
+  SetLength(MaskBlue, Input.Height, Input.Width);
+  SetLength(BlurRed, Input.Height, Input.Width);
+  SetLength(BlurGreen, Input.Height, Input.Width);
+  SetLength(BlurBlue, Input.Height, Input.Width);
+
+  KernelWidth := 3;
+
+  SetLength(Kernel, KernelWidth, KernelWidth);
+  Gauss(sigma, KernelWidth, Kernel);
+
+  for i := 0 to Input.Height - 1 do
+  begin
+
+    p1 := Input.ScanLine[i];
+
+    if i > 0 then
+       p0 := Input.ScanLine[i - 1]
+    else
+       p0 := Input.ScanLine[i];
+
+    if i < Input.Height - 1 then
+       p2 := Input.ScanLine[i + 1]
+    else
+       p2 := Input.ScanLine[i];
+
+
+    for j := 0 to Input.Width - 1 do
+    begin
+
+      j1 := j;
+
+      if j > 0 then
+         j0 := j - 1
+      else
+         j0 := j;
+
+      if j < Input.Width then
+         j2 := j + 1
+      else
+         j2 := j;
+
+      BlurRed[i][j] := Kernel[0][0] * p0[j0].red + Kernel[0][1] * p0[j1].red + Kernel[0][2] * p0[j2].red
+                     + Kernel[1][0] * p1[j0].red + Kernel[1][1] * p1[j1].red + Kernel[1][2] * p1[j2].red
+                     + Kernel[2][0] * p2[j0].red + Kernel[2][1] * p2[j1].red + Kernel[2][2] * p2[j2].red;
+
+
+      BlurGreen[i][j] := Kernel[0][0] * p0[j0].green + Kernel[0][1] * p0[j1].green + Kernel[0][2] * p0[j2].green
+                       + Kernel[1][0] * p1[j0].green + Kernel[1][1] * p1[j1].green + Kernel[1][2] * p1[j2].green
+                       + Kernel[2][0] * p2[j0].green + Kernel[2][1] * p2[j1].green + Kernel[2][2] * p2[j2].green;
+
+
+
+      BlurBlue[i][j] := Kernel[0][0] * p0[j0].blue + Kernel[0][1] * p0[j1].blue + Kernel[0][2] * p0[j2].blue
+                      + Kernel[1][0] * p1[j0].blue + Kernel[1][1] * p1[j1].blue + Kernel[1][2] * p1[j2].blue
+                      + Kernel[2][0] * p2[j0].blue + Kernel[2][1] * p2[j1].blue + Kernel[2][2] * p2[j2].blue;
+
+      end;
+  end;
+
+  for i := 0 to Input.Height - 1 do
+  begin
+
+       p1 := Input.ScanLine[i];
+
+       for j := 0 to Input.Width - 1 do
+       begin
+            MaskRed[i][j] := p1[j].red - BlurRed[i][j];
+            MaskGreen[i][j] := p1[j].green - BlurGreen[i][j];
+            MaskBlue[i][j] := p1[j].blue - BlurBlue[i][j];
+       end;
+  end;
+
+  for i := 0 to Input.Height - 1 do
+  begin
+       //pOutput := Output.ScanLine[i];
+       p1 := Input.ScanLine[i];
+
+       for j := 0 to Input.Width - 1 do
+       begin
+
+         value := p1[j].red + f * MaskRed[i][j];
+         if value < 0 then value := 0;
+         if value > 255 then value := 255;
+
+         //pOutput[j].red := Trunc(value);
+         p1[j].red := Trunc(value);
+
+         value := p1[j].green + f * MaskGreen[i][j];
+         if value < 0 then value := 0;
+         if value > 255 then value := 255;
+
+         //pOutput[j].green := Trunc(value);
+         p1[j].green := Trunc(value);
+
+         value := p1[j].blue + f * MaskBlue[i][j];
+         if value < 0 then value := 0;
+         if value > 255 then value := 255;
+
+         //pOutput[j].blue := Trunc(value);
+         p1[j].blue := Trunc(value);
+       end;
+  end;
+
+
+  Input.InvalidateBitmap; // changed by direct access
+  MaskRed := nil;
+  MaskGreen := nil;
+  MaskBlue := nil;
+  BlurRed := nil;
+  BlurGreen := nil;
+  BlurBlue := nil;
+  Kernel := nil;
+end;
+
+procedure Gauss(sigma: Single; Width: Integer; var Kernel: ImageArray);
+var
+   Mean, Sum : Single;
+   x, y: Integer;
+begin
+   Mean := Width div 2;
+   Sum := 0.0;
+
+   for x := 0 to Width - 1 do
+   begin
+     for y := 0 to Width - 1 do
+     begin
+       kernel[x][y] := Exp(  -0.5 * (Power((x-mean)/sigma, 2.0) + Power((y-mean)/sigma,2.0))  )
+                       / (2 * pi * sigma * sigma );
+
+       sum := sum + kernel[x][y];
+     end;
+   end;
+
+   //writeln(sum);
+
+   for x := 0 to Width - 1 do
+   begin
+     for y := 0 to Width - 1 do
+     begin
+       kernel[x][y] := kernel[x][y] / sum;
+       write(kernel[x][y]);
+       write(' ');
+     end;
+     writeln;
+   end;
+
+end;
 
 procedure BGRASetAlpha(Input : TBGRABitmap);
 var

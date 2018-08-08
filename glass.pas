@@ -708,6 +708,8 @@ fm := vConfigurations.iMagnification;
    if vConfigurations.invertColors then
       BGRAInvertColors(image);
 
+   BGRAUnsharp3(image, 3.0, 0.5);
+
    if vConfigurations.AntiAliasing then
    begin
         if vConfigurations.AntiAliasingMode = IdentCatMullAntiAliasing then
