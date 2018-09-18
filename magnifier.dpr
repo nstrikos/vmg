@@ -72,7 +72,7 @@ uses
    UniqueInstanceRaw,
 {$ENDIF}
 
-  plugininfo, startform;
+  plugininfo, startform, postprocessdlg, dockedglass;
 
 {@@
   Application Main Procedure

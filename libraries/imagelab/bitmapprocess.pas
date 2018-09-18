@@ -1079,6 +1079,7 @@ begin
 
          //pOutput[j].blue := Trunc(value);
          p1[j].blue := Trunc(value);
+         p1[j].alpha := 255;
        end;
   end;
 

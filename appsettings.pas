@@ -69,10 +69,15 @@ type
     RemapWidth: Integer;
     RemapHeight: Integer;
     AntiAliasingMode : string;
+    DockedGlassLeft : Integer;
+    DockedGlassTop : Integer;
+    DockedGlassWidth: Integer;
+    DockedGlassHeight : Integer;
     constructor Create;
     destructor Destroy; override;
     procedure ReadFromFile(Sender: TObject);
     procedure Save(Sender: TObject);
+    procedure SaveDockedGlassSettings(Left, Top, Width, Height : Integer);
     function GetConfigFilePath: string;
     function GetMyDirectory: string;
     function GetSystemLanguage: Integer;
@@ -130,6 +135,10 @@ begin
   RemapWidth := 50;
   RemapHeight := 50;
   AntiAliasingMode := IdentSimpleAntiAliasing;
+  DockedGlassLeft := 100;
+  DockedGlassTop := 100;
+  DockedGlassWidth := 200;
+  DockedGlassHeight := 200;
 
   { Now identifies where the configuration file should be }
   ConfigFilePath := GetConfigFilePath();
@@ -205,8 +214,13 @@ begin
     UseRemap := MyFile.ReadBool(SectionAdditionalEffects, IdentUseRemap, False);
     RemapWidth := MyFile.ReadInteger(SectionAdditionalEffects, IdentRemapWidth, 50);
     RemapHeight := MyFile.ReadInteger(SectionAdditionalEffects, IdentRemapHeight, 50);
-
     AntiAliasingMode := MyFile.ReadString(SectionAdditionalEffects, IdentAntiAliasingMode, IdentSimpleAntiAliasing);
+
+    DockedGlassLeft := MyFile.ReadInteger(SectionDockedGlass, IdentDockedGlassLeft, 100);
+    DockedGlassTop := MyFile.ReadInteger(SectionDockedGlass, IdentDockedGlassTop, 100);
+    DockedGlassWidth := MyFile.ReadInteger(SectionDockedGlass, IdentDockedGlassWidth, 200);
+    DockedGlassHeight := MyFile.ReadInteger(SectionDockedGlass, IdentDockedGlassHeight, 200);
+
   finally
     MyFile.Free;
 
@@ -257,8 +271,29 @@ begin
     MyFile.WriteBool(SectionAdditionalEffects, IdentUseRemap, UseRemap);
     MyFile.WriteInteger(SectionAdditionalEffects, IdentRemapWidth, RemapWidth);
     MyFile.WriteInteger(SectionAdditionalEffects, IdentRemapHeight, RemapHeight);
-
     Myfile.WriteString(SectionAdditionalEffects, IdentAntiAliasingMode, AntiAliasingMode);
+
+    MyFile.WriteInteger(SectionDockedGlass, IdentDockedGlassLeft, DockedGlassLeft);
+    MyFile.WriteInteger(SectionDockedGlass, IdentDockedGlassTop, DockedGlassTop);
+  finally
+    MyFile.Free;
+  end;
+end;
+
+procedure TConfigurations.SaveDockedGlassSettings(Left, Top, Width, Height : Integer);
+var
+  MyFile: TIniFile;
+begin
+  MyFile := TIniFile.Create(ConfigFilePath);
+  DockedGlassLeft := Left;
+  DockedGlassTop := Top;
+  DockedGlassWidth := Width;
+  DockedGlassHeight := Height;
+  try
+    MyFile.WriteInteger(SectionDockedGlass, IdentDockedGlassLeft, DockedGlassLeft);
+    MyFile.WriteInteger(SectionDockedGlass, IdentDockedGlassTop, DockedGlassTop);
+    MyFile.WriteInteger(SectionDockedGlass, IdentDockedGlassWidth, DockedGlassWidth);
+    MyFile.WriteInteger(SectionDockedGlass, IdentDockedGlassHeight, DockedGlassHeight);
   finally
     MyFile.Free;
   end;

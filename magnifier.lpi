@@ -217,7 +217,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="16">
+    <Units Count="18">
       <Unit0>
         <Filename Value="magnifier.dpr"/>
         <IsPartOfProject Value="True"/>
@@ -294,6 +294,18 @@
         <ComponentName Value="vStartWindow"/>
         <ResourceBaseClass Value="Form"/>
       </Unit15>
+      <Unit16>
+        <Filename Value="postprocessdlg.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="dockedglass.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="DockedGlassWindow"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit17>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -301,7 +313,7 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="$(LazarusDir)\components\opengl\gtk2x11\include"/>
-      <OtherUnitFiles Value="$(LazarusDir)\components\opengl\gtk2x11;$(LazarusDir)\components\jpeg;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)"/>
+      <OtherUnitFiles Value="$(LazarusDir)\components\opengl\gtk2x11;libraries\bgrabitmap;libraries\imagelab;libraries\uniqueinstance;$(LazarusDir)\components\jpeg;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)"/>
       <SrcPath Value="$(LazarusDir)\lcl;$(LazarusDir)\lcl\interfaces\$(LCLWidgetType)"/>
     </SearchPaths>
     <Parsing>

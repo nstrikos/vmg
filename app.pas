@@ -116,6 +116,7 @@ type
     procedure ShowHomePage(Sender: TObject);
     procedure ShowAboutBox(Sender: TObject);
     procedure ShowConfigDialog(Sender: TObject);
+    procedure ShowDockedGlass();
     procedure ShowPostProcessDialog(Sender: TObject);
     procedure ShowHelp(Sender: TObject);
     procedure SystrayClick(Sender: TObject);
@@ -140,7 +141,7 @@ var
 
 implementation
 
-uses about, translationsvmg, configdlg, postprocessdlg;
+uses about, translationsvmg, configdlg, postprocessdlg, dockedglass, dockedglasssettings;
 
 {*******************************************************************
 *  app.dfm is a dummy resource file required by Delphi to create the form
@@ -236,6 +237,8 @@ begin
   CheckWatchFileTimer.Interval := 1000;
   CheckWatchFileTimer.OnTimer := CheckWatchFile;
   {$ENDIF}
+
+  dgSettings := TDockedGlassSettings.Create;
 end;
 
 {*******************************************************************}
@@ -510,6 +513,8 @@ begin
   vMenu.Free;
   vGlass.Free;
   DynamicModeTimer.Free;
+  FreeAndNil(vDockedGlass);
+  dgSettings.Free;
 
   {$IFDEF Unix}
   CheckWatchFileTimer.Free;
@@ -547,7 +552,9 @@ var
 begin
   // The Sleep here is necessary or else sometimes the popup menu
   // won't have time to be painted over and we will capture it's image
-  Sleep(10);
+  FreeAndNil(vDockedGlass);
+  vDockedGlass := nil;
+  Sleep(500);
   Application.ProcessMessages;
 
   {*******************************************************************
@@ -1404,6 +1411,7 @@ begin
    VK_ESCAPE: HideWindow(Self);
    VK_RETURN: HideWindow(Self);
    VK_B: ChangeGraphicalBorder(Self);
+   VK_G: ShowDockedGlass();
    VK_Q: CloseWindow(Self);
    VK_C: if Shift = [ssCtrl] then Clipboard.AsText := '';
   else
@@ -1671,7 +1679,19 @@ begin
      writeln(tFile, 'Show');
      CloseFile(tFile);
 end;
+
 {$ENDIF}
+
+procedure TMainWindow.ShowDockedGlass;
+begin
+  HideWindow(Self);
+  if (vDockedGlass = nil) then
+  begin
+    vDockedGlass :=  TDockedGlassWindow.Create(nil);
+    vDockedGlass.SetSettings(dgSettings);
+    vDockedGlass.Show;
+  end;
+end;
 
 end.
 

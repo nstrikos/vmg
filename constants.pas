@@ -308,6 +308,7 @@ const
   SectionWindows = 'Windows';
   SectionPlugins = 'Plugins';
   SectionAdditionalEffects = 'Effects';
+  SectionDockedGlass = 'DockedGlass';
 
   IdentgraphicalBorder = 'graphicalBorder';
   IdentxSquare = 'xSquare';
@@ -337,6 +338,11 @@ const
   IdentSimpleAntiAliasing = 'Simple';
   IdentCatMullAntiAliasing = 'CatMull';
   IdentPolyramaAntiAliasing = 'Polyrama';
+
+  IdentDockedGlassLeft = 'DockedGlassLeft';
+  IdentDockedGlassTop = 'DockedGlassTop';
+  IdentDockedGlassWidth = 'DockedGlassWidth';
+  IdentDockedGlassHeight = 'DockedGlassHeight';
 
 {*******************************************************************
 *  Custom Signals
