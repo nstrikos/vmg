@@ -1120,10 +1120,10 @@ begin
      for y := 0 to Width - 1 do
      begin
        kernel[x][y] := kernel[x][y] / sum;
-       write(kernel[x][y]);
-       write(' ');
+       //write(kernel[x][y]);
+       //write(' ');
      end;
-     writeln;
+     //writeln;
    end;
 
 end;

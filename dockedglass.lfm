@@ -1,13 +1,13 @@
 object DockedGlassWindow: TDockedGlassWindow
-  Left = 632
+  Left = 522
   Height = 240
-  Top = 304
+  Top = 376
   Width = 320
   BorderStyle = bsNone
   Caption = 'DockedGlassWindow'
-  ClientHeight = 240
-  ClientWidth = 320
-  DesignTimePPI = 106
+  ClientHeight = 0
+  ClientWidth = 0
+  DesignTimePPI = 120
   OnHide = FormHide
   OnKeyDown = FormKeyDown
   OnShow = FormShow
@@ -18,9 +18,46 @@ object DockedGlassWindow: TDockedGlassWindow
     Top = 0
     Width = 320
     Align = alClient
+    OnDblClick = ImageDblClick
     OnMouseDown = ImageMouseDown
     OnMouseMove = ImageMouseMove
     OnMouseUp = ImageMouseUp
-    OnMouseWheel = ImageMouseWheel
+    PopupMenu = PopupMenu
+  end
+  object PopupMenu: TPopupMenu
+    left = 75
+    top = 59
+    object IncWidthMenuItem: TMenuItem
+      Caption = 'Increase width'
+      OnClick = IncWidthMenuItemClick
+    end
+    object DecWidthMenuItem: TMenuItem
+      Caption = 'Decrease width'
+      OnClick = DecWidthMenuItemClick
+    end
+    object IncHeightMenuItem: TMenuItem
+      Caption = 'Increase height'
+      OnClick = IncHeightMenuItemClick
+    end
+    object DecHeightMenuItem: TMenuItem
+      Caption = 'Decrease height'
+      OnClick = DecHeightMenuItemClick
+    end
+    object ZoomInMenuItem: TMenuItem
+      Caption = 'Zoom in'
+      OnClick = ZoomInMenuItemClick
+    end
+    object ZoomOutMenuItem: TMenuItem
+      Caption = 'Zoom out'
+      OnClick = ZoomOutMenuItemClick
+    end
+    object HideMenuItem: TMenuItem
+      Caption = 'Hide'
+      OnClick = HideMenuItemClick
+    end
+    object ExitMenuItem: TMenuItem
+      Caption = 'Exit'
+      OnClick = ExitMenuItemClick
+    end
   end
 end
