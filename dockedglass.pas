@@ -15,7 +15,7 @@ type
   { TDockedGlassWindow }
 
   TDockedGlassWindow = class(TForm)
-    Image: TImage;
+  	Image: TImage;
     IncWidthMenuItem: TMenuItem;
     DecWidthMenuItem: TMenuItem;
     IncHeightMenuItem: TMenuItem;
@@ -45,17 +45,18 @@ type
     procedure ZoomInMenuItemClick(Sender: TObject);
     procedure ZoomOutMenuItemClick(Sender: TObject);
   private
-     MouseIsDown: boolean;
-     FormX, FormY: integer;
-     GlobalX, GlobalY : integer;
-     mouseX, mouseY : integer;
-     mouseDrawX, mouseDrawY : integer;
-     w, h : integer;
+     MouseIsDown: boolean;  //User holds mouse down to drag the form around
+     FormX, FormY: integer; //form coordinates - we use it for dragging the form around
+     PX, PY : integer; //Coordinates of the area that should be enlarged
+     CursorX, CursorY : integer; //global mouse coordinates around the screen - we use it to know where the mouse is
+     mouseDrawX, mouseDrawY : integer; //coordinates of mouse position inside the form - we use it to draw the mouse;
+     w, h : integer; //Width and height of the area that will be enlarged
      fm : single;
      bmpDisplay : TBitmap;
      srcBitmap, dstBitmap: TBGRABitmap;
      Timer : TTimer;
      mSettings : TDockedGlassSettings;
+     SaveCursor : TCursor;
      procedure IncWidth;
      procedure DecWidth;
      procedure IncHeight;
@@ -139,9 +140,11 @@ procedure TDockedGlassWindow.ImageMouseDown(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
     if Button = mbLeft then begin
-       MouseIsDown := True;
-       FormX := X;
-       FormY := Y;
+    	MouseIsDown := True;
+       	FormX := X;
+       	FormY := Y;
+    	SaveCursor := Image.Cursor;
+        Image.Cursor := crHandPoint;
     end
 end;
 
@@ -158,17 +161,18 @@ end;
 procedure TDockedGlassWindow.ImageMouseUp(Sender: TObject;
   Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
-   MouseIsDown := False;
-   mSettings.SetX(Left);
-   mSettings.SetY(Top);
-   mSettings.SetWidth(Width);
-   mSettings.SetHeight(Height);
-   vConfigurations.SaveDockedGlassSettings(Left, Top, Width, Height);
+	MouseIsDown := False;
+   	mSettings.SetX(Left);
+   	mSettings.SetY(Top);
+   	mSettings.SetWidth(Width);
+   	mSettings.SetHeight(Height);
+   	vConfigurations.SaveDockedGlassSettings(Left, Top, Width, Height);
+    Image.Cursor := SaveCursor;
 end;
 
 procedure TDockedGlassWindow.HandleDockTimer(Sender: TObject);
 begin
-     DrawBitmap;
+	DrawBitmap;
 end;
 
 procedure TDockedGlassWindow.DrawBitmap;
@@ -183,10 +187,10 @@ var
 	p : TPoint;
 begin
 	GetCursorPos(p);
-    mouseX := p.x;
-    mouseY := p.y;
+    CursorX := p.x;
+    CursorY := p.y;
 
-	if CheckBounds(mouseX, mouseY) = True then
+	if CheckBounds(CursorX, CursorY) = True then
 		Exit;
 
     CheckFm;
@@ -195,8 +199,8 @@ begin
     GetMouseCoords;
 
     srcBitmap.Canvas.CopyRect(Bounds(0, 0, w, h),
-                                    bmpDisplay.Canvas,
-                                    Bounds(GlobalX, GlobalY, w, h));
+                              bmpDisplay.Canvas,
+                              Bounds(PX, PY, w, h));
     BGRAUnsharp3(srcBitmap, 3.0, 0.5);
     BGRABicubicCatmullRom(srcBitmap, fm, dstBitmap);
 
@@ -225,7 +229,9 @@ end;
 
 procedure TDockedGlassWindow.CheckFm;
 begin
-	if ( fm <> vConfigurations.iMagnification) then
+    //This check is necessary because the user may have changed
+    //iMagnification from system tray
+    if ( fm <> vConfigurations.iMagnification) then
     begin
     	fm := vConfigurations.iMagnification;
         SizeChanged;
@@ -234,8 +240,7 @@ end;
 
 procedure TDockedGlassWindow.LoadBitmap(ScreenDC: HDC);
 begin
-
-	{$ifdef Darwin}
+    {$ifdef Darwin}
    	bmpRetinaDisplay := TBitmap.Create;
    	bmpRetinaDisplay.LoadFromDevice(ScreenDC);
    	bmpDisplay.Width := CXScreen;
@@ -250,36 +255,52 @@ begin
 end;
 
 procedure TDockedGlassWindow.GetMouseCoords;
+var
+    offset, right, bottom : integer;
+
 begin
-   GlobalX := mouseX - w div 2; //Holds top left x-coordinate of the area that should be magnified
-   GlobalY := mouseY - h div 2; //Holds top left y-coordinate of the area that should be magnified
+	PX := CursorX - w div 2; //Holds top left x-coordinate of the area that should be magnified
+    PY := CursorY - h div 2; //Holds top left y-coordinate of the area that should be magnified
 
-   mouseDrawX := Image.Width div 2;  //Holds where mouse should be painted x-coordinate inside dock
-   mouseDrawY := Image.Height div 2; //Holds where mouse should be painted y-coordinate inside dock
+	mouseDrawX := Image.Width div 2;  //Holds where mouse should be painted x-coordinate inside dock
+	mouseDrawY := Image.Height div 2; //Holds where mouse should be painted y-coordinate inside dock
+                                      //Normally mouseDrawX and mouseDrawY are in the middle of the form
 
-   if GlobalX < 0 then // If mouse goes to the left of the screen
-   begin
-        mouseDrawX := mouseDrawX + Round(GlobalX * fm); //px is negative so we add it, not subtract it
-        GlobalX := 0;
-   end;
-   if GlobalY < 0 then
-   begin
-        mouseDrawY := mouseDrawY + Round(GlobalY * fm);
-        GlobalY := 0;
-   end;
+	if PX < 0 then //If mouse goes to the left of the screen
+	begin
+    	offset := Round(PX * fm);
+    	mouseDrawX := mouseDrawX + offset;  //If mouse goes to the left, we have to subtract offset
+        									//So the mouse will be drawn to the left of the middle
+        									//px is negative so we add it, not subtract it
+        PX := 0;
+   	end;
 
+    if PY < 0 then //if mouse goes to the top of the screen
+   	begin
+    	offset := Round(PY * fm);
+        mouseDrawY := mouseDrawY + offset;
+        PY := 0;
+	end;
 
-   if GlobalX + w > Screen.Width then
-   begin
-        mouseDrawX := mouseDrawX + Round( (GlobalX + w - Screen.Width) * fm);
-        GlobalX := Screen.Width - w;
-   end;
+    //Check right
+    right := PX + w;
+    offset := right - Screen.Width;
+   	if offset > 0 then  //If mouse goes to the right of the screen
+	begin
+    	offset := Round(offset * fm);          //Scale offset
+        mouseDrawX := mouseDrawX + offset;     //So the mouse will be draw to the right of the middle
+        PX := Screen.Width - w;   			   //This is as far we can go to the right
+	end;
 
-   if GlobalY + h > Screen.Height then
-   begin
-       mouseDrawY := mouseDrawY + Round( (GlobalY + h - Screen.Height) * fm );
-       GlobalY := Screen.Height - h;
-   end;
+    //Check bottom
+    bottom := PY + h;
+    offset := bottom - Screen.Height;
+   	if offset > 0 then
+	begin
+        offset := Round( offset * fm);
+        mouseDrawY := mouseDrawY + offset;
+    	PY := Screen.Height - h;               //This is as far we can go to the bottom
+   	end;
 end;
 
 procedure TDockedGlassWindow.DrawBorder;
