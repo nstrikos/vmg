@@ -7,9 +7,14 @@ unit dockedglass;
 interface
 
 uses
+
+  {$IFDEF WINDOWS}
+  Windows,
+  {$ENDIF}
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, LCLIntf, LCLType, Menus, BGRABitmap, BitmapProcess,
-  dockedglasssettings, appsettings, math;
+  dockedglasssettings, appsettings, math,
+  BGRABitmapTypes;
 type
 
   { TDockedGlassWindow }
@@ -86,6 +91,8 @@ implementation
 { TDockedGlassWindow }
 
 constructor TDockedGlassWindow.Create(AOwner: TComponent);
+const
+  WH_MOUSE_LL = 14;
 begin
   inherited Create(AOwner);
   bmpDisplay := TBitmap.Create;
@@ -104,6 +111,7 @@ begin
   Timer.Enabled := False;
   Timer.Interval := 25;
   Timer.OnTimer := HandleDockTimer;
+  DoubleBuffered := True;
 end;
 
 destructor TDockedGlassWindow.Destroy;
@@ -202,7 +210,10 @@ begin
                               bmpDisplay.Canvas,
                               Bounds(PX, PY, w, h));
     BGRAUnsharp3(srcBitmap, 3.0, 0.5);
-    BGRABicubicCatmullRom(srcBitmap, fm, dstBitmap);
+    //BGRABicubicCatmullRom(srcBitmap, fm, dstBitmap);
+    //BGRABilinear(srcBitmap, fm, dstBitmap);
+    srcBitmap.ResampleFilter := rfSpline;
+    dstBitmap := srcBitmap.Resample(Image.Width, Image.Height) as TBGRABitmap;
 
   	{$IFDEF Unix}
    	Image.Picture.Bitmap.Assign(dstBitmap);
@@ -334,13 +345,24 @@ begin
 end;
 
 procedure TDockedGlassWindow.DrawMouse;
+var
+    {$IFDEF WINDOWS}
+    HCursor : THandle;
+    {$ENDIF}
 begin
-	Image.Canvas.Pen.Width := 4;
+    {$IFDEF WINDOWS}
+	HCursor:= Screen.Cursors[Ord(Screen.Cursor)];
+    DrawIconEx(Image.Canvas.Handle, mouseDrawX, mouseDrawY, HCursor, 32, 32,
+              0, 0, DI_NORMAL);//Draws to canvas
+
+    {$ELSE}
+    Image.Canvas.Pen.Width := 4;
   	Image.Canvas.Pen.Color:= clRed;
   	Image.Canvas.MoveTo(mouseDrawX, mouseDrawY - 50);
   	Image.Canvas.LineTo(mouseDrawX, mouseDrawY + 50);
   	Image.Canvas.MoveTo(mouseDrawX - 50, mouseDrawY);
   	Image.Canvas.LineTo(mouseDrawX + 50, mouseDrawY);
+    {$ENDIF}
 end;
 
 procedure TDockedGlassWindow.FormKeyDown(Sender: TObject; var Key: Word;

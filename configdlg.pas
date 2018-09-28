@@ -252,7 +252,7 @@ end;
 {*******************************************************************}
 procedure TConfigDialog.FormShow(Sender: TObject);
 begin
-  WriteLn('[TConfigDialog.FormShow]');
+  //WriteLn('[TConfigDialog.FormShow]');
   UpdateInterface;
 end;
 

@@ -130,7 +130,7 @@ type
     procedure ExecuteLens(Sender: TObject);
     procedure HandleDynamicModeTimer(Sender: TObject);
     procedure DoChangeLanguage(AID: Integer);
-    {$IFDEF Win32}
+    {$IFDEF WINDOWS}
     procedure WndProc(var TheMessage : TLMessage); override;
     {$ENDIF}
     function DisableFormBackgroundDrawing(AForm: TCustomForm): Boolean;
@@ -1216,6 +1216,7 @@ begin
        RegisterHotKey(vMainWindow.Handle, 10, MOD_ALT or MOD_CONTROL, VK_8);
        RegisterHotKey(vMainWindow.Handle, 11, MOD_ALT or MOD_CONTROL, VK_5);
        RegisterHotKey(vMainWindow.Handle, 12, MOD_ALT or MOD_CONTROL, VK_6);
+       RegisterHotKey(vMainWindow.Handle, 13, MOD_ALT or MOD_CONTROL, VkKeyScan('n'));
      end;
      ID_HOTKEY_DISABLE_ASDW:
      begin
@@ -1238,7 +1239,7 @@ begin
 {$ENDIF}
 end;
 
-{$IFDEF Win32}
+{$IFDEF WINDOWS}
 {*******************************************************************}
 {@@
   Window function of the main window.
@@ -1294,7 +1295,8 @@ begin
          {$ENDIF}
        end;
       else
-        vMainWindow.ExecuteLens(vMainWindow);
+       if HiWord(TheMessage.lParam) = 78 then ShowDockedGlass
+	   else    vMainWindow.ExecuteLens(vMainWindow);
       end;
     end;
 
@@ -1689,8 +1691,8 @@ begin
   begin
     vDockedGlass :=  TDockedGlassWindow.Create(nil);
     vDockedGlass.SetSettings(dgSettings);
-    vDockedGlass.Show;
   end;
+  vDockedGlass.Show;
 end;
 
 end.
