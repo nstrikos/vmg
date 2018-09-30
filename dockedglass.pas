@@ -91,8 +91,6 @@ implementation
 { TDockedGlassWindow }
 
 constructor TDockedGlassWindow.Create(AOwner: TComponent);
-const
-  WH_MOUSE_LL = 14;
 begin
   inherited Create(AOwner);
   bmpDisplay := TBitmap.Create;

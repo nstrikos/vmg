@@ -72,6 +72,14 @@ uses
 
 type
 
+   MouseLLHookStruct = record
+    pt          : TPoint;
+    mouseData   : cardinal;
+    flags       : cardinal;
+    time        : cardinal;
+    dwExtraInfo : cardinal;
+  end;
+
   { TMainWindow }
 
   TMainWindow = class(TForm)
@@ -81,6 +89,7 @@ type
     vMenu: TPopupMenu;
     SystrayIcon: TTrayIcon;
     DynamicModeTimer: TTimer;
+    MiddleMouseClick : Boolean;
     {$IFDEF Unix}
     CheckWatchFileTimer: TTimer;
     procedure CheckWatchFile(Sender: TObject);
@@ -136,8 +145,11 @@ type
     function DisableFormBackgroundDrawing(AForm: TCustomForm): Boolean;
   end;
 
+  function LowLevelMouseHookProc(nCode, wParam, lParam : integer) : integer; stdcall;
+
 var
   vMainWindow: TMainWindow;
+  mHook : cardinal;
 
 implementation
 
@@ -192,6 +204,8 @@ end;
 }
 {*******************************************************************}
 constructor TMainWindow.Create(AOwner: TComponent);
+const
+  WH_MOUSE_LL = 14;
 var
   lResult: LongBool;
 begin
@@ -239,6 +253,8 @@ begin
   {$ENDIF}
 
   dgSettings := TDockedGlassSettings.Create;
+  mHook := SetWindowsHookEx(WH_MOUSE_LL, @LowLevelMouseHookProc, hInstance, 0);
+  MiddleMouseClick := False;
 end;
 
 {*******************************************************************}
@@ -515,6 +531,7 @@ begin
   DynamicModeTimer.Free;
   FreeAndNil(vDockedGlass);
   dgSettings.Free;
+    UnhookWindowsHookEx(mHook);
 
   {$IFDEF Unix}
   CheckWatchFileTimer.Free;
@@ -554,7 +571,12 @@ begin
   // won't have time to be painted over and we will capture it's image
   FreeAndNil(vDockedGlass);
   vDockedGlass := nil;
-  Sleep(500);
+  if not MiddleMouseClick then
+  begin
+  	Sleep(500);
+    MiddleMouseClick := False;
+  end;
+
   Application.ProcessMessages;
 
   {*******************************************************************
@@ -1693,6 +1715,31 @@ begin
     vDockedGlass.SetSettings(dgSettings);
   end;
   vDockedGlass.Show;
+end;
+
+function LowLevelMouseHookProc(nCode, wParam, lParam : integer) : integer; stdcall;
+var
+  info : ^MouseLLHookStruct absolute lParam;
+  i : integer;
+begin
+  i := 0;
+  result := CallNextHookEx(mHook, nCode, wParam, lParam);
+  with info^ do begin
+  	case wParam of
+      WM_MBUTTONDOWN :
+      begin
+        if not vGlass.IsVisible then
+        begin
+        	vMainWindow.MiddleMouseClick := True;
+        	vMainWindow.ExecuteLens(vMainWindow);
+        end
+        else
+        begin
+        	vMainWindow.ShowDockedGlass;
+        end;
+      end;
+    end;
+  end;
 end;
 
 end.

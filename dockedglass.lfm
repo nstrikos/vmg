@@ -5,8 +5,8 @@ object DockedGlassWindow: TDockedGlassWindow
   Width = 320
   BorderStyle = bsNone
   Caption = 'DockedGlassWindow'
-  ClientHeight = 240
-  ClientWidth = 320
+  ClientHeight = 0
+  ClientWidth = 0
   DesignTimePPI = 120
   OnHide = FormHide
   OnKeyDown = FormKeyDown

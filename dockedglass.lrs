@@ -3,22 +3,22 @@
 LazarusResources.Add('TDockedGlassWindow','FORMDATA',[
   'TPF0'#18'TDockedGlassWindow'#17'DockedGlassWindow'#4'Left'#3#10#2#6'Height'#3
   +#240#0#3'Top'#3'x'#1#5'Width'#3'@'#1#11'BorderStyle'#7#6'bsNone'#7'Caption'#6
-  +#17'DockedGlassWindow'#12'ClientHeight'#3#240#0#11'ClientWidth'#3'@'#1#13'De'
-  +'signTimePPI'#2'x'#6'OnHide'#7#8'FormHide'#9'OnKeyDown'#7#11'FormKeyDown'#6
-  +'OnShow'#7#8'FormShow'#10'LCLVersion'#6#7'1.8.4.0'#0#6'TImage'#5'Image'#4'Le'
-  +'ft'#2#0#6'Height'#3#240#0#3'Top'#2#0#5'Width'#3'@'#1#5'Align'#7#8'alClient'
-  +#10'OnDblClick'#7#13'ImageDblClick'#11'OnMouseDown'#7#14'ImageMouseDown'#11
-  +'OnMouseMove'#7#14'ImageMouseMove'#9'OnMouseUp'#7#12'ImageMouseUp'#9'PopupMe'
-  +'nu'#7#9'PopupMenu'#0#0#10'TPopupMenu'#9'PopupMenu'#4'left'#2'K'#3'top'#2';'
-  +#0#9'TMenuItem'#16'IncWidthMenuItem'#7'Caption'#6#14'Increase width'#7'OnCli'
-  +'ck'#7#21'IncWidthMenuItemClick'#0#0#9'TMenuItem'#16'DecWidthMenuItem'#7'Cap'
-  +'tion'#6#14'Decrease width'#7'OnClick'#7#21'DecWidthMenuItemClick'#0#0#9'TMe'
-  +'nuItem'#17'IncHeightMenuItem'#7'Caption'#6#15'Increase height'#7'OnClick'#7
-  +#22'IncHeightMenuItemClick'#0#0#9'TMenuItem'#17'DecHeightMenuItem'#7'Caption'
-  +#6#15'Decrease height'#7'OnClick'#7#22'DecHeightMenuItemClick'#0#0#9'TMenuIt'
-  +'em'#14'ZoomInMenuItem'#7'Caption'#6#7'Zoom in'#7'OnClick'#7#19'ZoomInMenuIt'
-  +'emClick'#0#0#9'TMenuItem'#15'ZoomOutMenuItem'#7'Caption'#6#8'Zoom out'#7'On'
-  +'Click'#7#20'ZoomOutMenuItemClick'#0#0#9'TMenuItem'#12'HideMenuItem'#7'Capti'
-  +'on'#6#4'Hide'#7'OnClick'#7#17'HideMenuItemClick'#0#0#9'TMenuItem'#12'ExitMe'
-  +'nuItem'#7'Caption'#6#4'Exit'#7'OnClick'#7#17'ExitMenuItemClick'#0#0#0#0
+  +#17'DockedGlassWindow'#12'ClientHeight'#2#0#11'ClientWidth'#2#0#13'DesignTim'
+  +'ePPI'#2'x'#6'OnHide'#7#8'FormHide'#9'OnKeyDown'#7#11'FormKeyDown'#6'OnShow'
+  +#7#8'FormShow'#10'LCLVersion'#6#7'1.8.4.0'#0#6'TImage'#5'Image'#4'Left'#2#0#6
+  +'Height'#3#240#0#3'Top'#2#0#5'Width'#3'@'#1#5'Align'#7#8'alClient'#10'OnDblC'
+  +'lick'#7#13'ImageDblClick'#11'OnMouseDown'#7#14'ImageMouseDown'#11'OnMouseMo'
+  +'ve'#7#14'ImageMouseMove'#9'OnMouseUp'#7#12'ImageMouseUp'#9'PopupMenu'#7#9'P'
+  +'opupMenu'#0#0#10'TPopupMenu'#9'PopupMenu'#4'left'#2'K'#3'top'#2';'#0#9'TMen'
+  +'uItem'#16'IncWidthMenuItem'#7'Caption'#6#14'Increase width'#7'OnClick'#7#21
+  +'IncWidthMenuItemClick'#0#0#9'TMenuItem'#16'DecWidthMenuItem'#7'Caption'#6#14
+  +'Decrease width'#7'OnClick'#7#21'DecWidthMenuItemClick'#0#0#9'TMenuItem'#17
+  +'IncHeightMenuItem'#7'Caption'#6#15'Increase height'#7'OnClick'#7#22'IncHeig'
+  +'htMenuItemClick'#0#0#9'TMenuItem'#17'DecHeightMenuItem'#7'Caption'#6#15'Dec'
+  +'rease height'#7'OnClick'#7#22'DecHeightMenuItemClick'#0#0#9'TMenuItem'#14'Z'
+  +'oomInMenuItem'#7'Caption'#6#7'Zoom in'#7'OnClick'#7#19'ZoomInMenuItemClick'
+  +#0#0#9'TMenuItem'#15'ZoomOutMenuItem'#7'Caption'#6#8'Zoom out'#7'OnClick'#7
+  +#20'ZoomOutMenuItemClick'#0#0#9'TMenuItem'#12'HideMenuItem'#7'Caption'#6#4'H'
+  +'ide'#7'OnClick'#7#17'HideMenuItemClick'#0#0#9'TMenuItem'#12'ExitMenuItem'#7
+  +'Caption'#6#4'Exit'#7'OnClick'#7#17'ExitMenuItemClick'#0#0#0#0
 ]);
