@@ -81,7 +81,7 @@ uses
 }
 
 {$IFDEF Unix}
-function CheckRunningInstance : Boolean;
+function CheckRunningInstance(Parameter: String) : Boolean;
 var
    tFile: TextFile;
 begin
@@ -89,7 +89,12 @@ begin
    begin
        AssignFile(tFile, FILE_WATCH_SHORTCUT);
        rewrite(tFile);
-       writeln(tFile, 'Show');
+       if (Parameter = 'mouse') then
+          writeln(tFile, 'Mouse')
+       else if (Parameter = 'docked') then
+       	  writeln(tFile, 'Docked')
+       else
+          writeln(tFile, 'Show');
        CloseFile(tFile);
        Result := True;
    end
@@ -127,7 +132,7 @@ begin
   *  The order in which these methods are called is very important
   *******************************************************************}
   {$IFDEF Unix}
-     if CheckRunningInstance then Exit;
+  if CheckRunningInstance(ParamStr(1)) then Exit;
   {$ENDIF}
 
   Application.Initialize;

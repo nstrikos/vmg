@@ -208,10 +208,10 @@ begin
                               bmpDisplay.Canvas,
                               Bounds(PX, PY, w, h));
     BGRAUnsharp3(srcBitmap, 3.0, 0.5);
-    //BGRABicubicCatmullRom(srcBitmap, fm, dstBitmap);
+    BGRABicubicCatmullRom(srcBitmap, fm, dstBitmap);
     //BGRABilinear(srcBitmap, fm, dstBitmap);
-    srcBitmap.ResampleFilter := rfSpline;
-    dstBitmap := srcBitmap.Resample(Image.Width, Image.Height) as TBGRABitmap;
+    //srcBitmap.ResampleFilter := rfSpline;
+    //dstBitmap := srcBitmap.Resample(Image.Width, Image.Height) as TBGRABitmap;
 
   	{$IFDEF Unix}
    	Image.Picture.Bitmap.Assign(dstBitmap);
@@ -343,8 +343,8 @@ begin
 end;
 
 procedure TDockedGlassWindow.DrawMouse;
+{$IFDEF WINDOWS}
 var
-    {$IFDEF WINDOWS}
     HCursor : THandle;
     {$ENDIF}
 begin

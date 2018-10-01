@@ -94,7 +94,6 @@ type
     CheckWatchFileTimer: TTimer;
     procedure CheckWatchFile(Sender: TObject);
     procedure CleanWatchFile;
-    procedure WriteWatchFile;
     {$ENDIF}
     procedure ChangeInvertColors(Sender: TObject);
     procedure ChangeGraphicalBorder(Sender: TObject);
@@ -145,11 +144,15 @@ type
     function DisableFormBackgroundDrawing(AForm: TCustomForm): Boolean;
   end;
 
+  {$IFDEF Windows}
   function LowLevelMouseHookProc(nCode, wParam, lParam : integer) : integer; stdcall;
+  {$ENDIF}
 
 var
   vMainWindow: TMainWindow;
+  {$IFDEF Windows}
   mHook : cardinal;
+  {$ENDIF}
 
 implementation
 
@@ -246,6 +249,7 @@ begin
   DynamicModeTimer.Interval := 25;
 
   {$IFDEF Unix}
+  CleanWatchFile;
   CheckWatchFileTimer := TTimer.Create(nil);
   CheckWatchFileTimer.Enabled := True;
   CheckWatchFileTimer.Interval := 1000;
@@ -253,8 +257,10 @@ begin
   {$ENDIF}
 
   dgSettings := TDockedGlassSettings.Create;
+  {$IFDEF Windows}
   mHook := SetWindowsHookEx(WH_MOUSE_LL, @LowLevelMouseHookProc, hInstance, 0);
   MiddleMouseClick := False;
+  {$ENDIF}
 end;
 
 {*******************************************************************}
@@ -531,7 +537,10 @@ begin
   DynamicModeTimer.Free;
   FreeAndNil(vDockedGlass);
   dgSettings.Free;
-    UnhookWindowsHookEx(mHook);
+  {$IFDEF Windows}
+  UnhookWindowsHookEx(mHook);
+  {$ENDIF}
+
 
   {$IFDEF Unix}
   CheckWatchFileTimer.Free;
@@ -1678,8 +1687,18 @@ begin
        end;
        if FileContents = 'Show' then
        begin
-            CleanWatchFile;
-            vMainWindow.ExecuteLens(nil);
+           CleanWatchFile;
+           vMainWindow.ExecuteLens(nil);
+       end
+       else if FileContents = 'Mouse' then
+       begin
+           CleanWatchFile;
+           ShowDockedGlass;
+       end
+       else if FileContents = 'Docked' then
+       begin
+           CleanWatchFile;
+       	   ShowDockedGlass;
        end;
   end;
 end;
@@ -1691,16 +1710,6 @@ begin
      AssignFile(tFile, FILE_WATCH_SHORTCUT);
      rewrite(tFile);
      writeln(tFile, '');
-     CloseFile(tFile);
-end;
-
-procedure TMainWindow.WriteWatchFile;
-var
-  tFile: TextFile;
-begin
-     AssignFile(tFile, FILE_WATCH_SHORTCUT);
-     rewrite(tFile);
-     writeln(tFile, 'Show');
      CloseFile(tFile);
 end;
 
@@ -1717,6 +1726,7 @@ begin
   vDockedGlass.Show;
 end;
 
+{$IFDEF Windows}
 function LowLevelMouseHookProc(nCode, wParam, lParam : integer) : integer; stdcall;
 var
   info : ^MouseLLHookStruct absolute lParam;
@@ -1741,6 +1751,7 @@ begin
     end;
   end;
 end;
+{$ENDIF}
 
 end.
 
