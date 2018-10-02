@@ -94,6 +94,8 @@ constructor TDockedGlassWindow.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   bmpDisplay := TBitmap.Create;
+  bmpDisplay.Width := Screen.Width;
+  bmpDisplay.Height := Screen.Height;
   FormStyle:=fsSystemStayOnTop;
   {$IFDEF Unix}
   ShowInTaskBar := stNever;
@@ -200,18 +202,30 @@ begin
 		Exit;
 
     CheckFm;
-    ScreenDC := GetDC(0);
-    LoadBitmap(ScreenDC);
     GetMouseCoords;
+    ScreenDC := GetDC(0);
 
+
+    {$IFDEF Windows}
+    BitBlt(srcBitmap.Canvas.Handle, //destination HDC
+  		   0, 0, srcBitmap.Width, srcBitmap.Height, // destination size
+  		   ScreenDC, //source HDC
+  		   PX, PY, // source size
+  		   SrcCopy
+  		   );
+    {$ELSE}
+    LoadBitmap(ScreenDC);
     srcBitmap.Canvas.CopyRect(Bounds(0, 0, w, h),
                               bmpDisplay.Canvas,
                               Bounds(PX, PY, w, h));
+    {$ENDIF}
+
     BGRAUnsharp3(srcBitmap, 3.0, 0.5);
-    BGRABicubicCatmullRom(srcBitmap, fm, dstBitmap);
+    //BGRABicubicCatmullRom(srcBitmap, fm, dstBitmap);
     //BGRABilinear(srcBitmap, fm, dstBitmap);
-    //srcBitmap.ResampleFilter := rfSpline;
-    //dstBitmap := srcBitmap.Resample(Image.Width, Image.Height) as TBGRABitmap;
+    srcBitmap.ResampleFilter := rfBestQuality;
+    FreeAndNil(dstBitmap);
+    dstBitmap := srcBitmap.Resample(Image.Width, Image.Height) as TBGRABitmap;
 
   	{$IFDEF Unix}
    	Image.Picture.Bitmap.Assign(dstBitmap);
@@ -350,7 +364,7 @@ var
 begin
     {$IFDEF WINDOWS}
 	HCursor:= Screen.Cursors[Ord(Screen.Cursor)];
-    DrawIconEx(Image.Canvas.Handle, mouseDrawX, mouseDrawY, HCursor, 32, 32,
+    DrawIconEx(Image.Canvas.Handle, mouseDrawX - 16, mouseDrawY - 16, HCursor, 32, 32,
               0, 0, DI_NORMAL);//Draws to canvas
 
     {$ELSE}
